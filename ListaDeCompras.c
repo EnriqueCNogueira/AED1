@@ -19,7 +19,6 @@ Node* criar_no(char *produto) {
 void inserir_ordenado(Node **cabeca, char *produto) {
     Node *novo = criar_no(produto);
     if (novo == NULL) {
-        fprintf(stderr, "Erro ao alocar memória para o novo nó.\n");
         return;
     }
 
@@ -49,9 +48,10 @@ void inserir_ordenado(Node **cabeca, char *produto) {
 }
 
 int imprimir_lista(Node *cabeca, char saida[20][50][100], int n) {
-    int i=0;
+    int i = 0;
     Node *temp = cabeca;
     while (temp != NULL) {
+        if (i >= 50) break; 
         strcpy(saida[i][n], temp->produto);
         temp = temp->prox;
         i++;
@@ -69,39 +69,36 @@ void liberar_lista(Node *cabeca) {
 }
 
 int main() {
-    char saida[20][50][100];
-    int m, n = 0, tam[100];
+    char saida[20][50][100] = {0}; 
+    int m, n = 0, tam[100] = {0};
 
     scanf("%d", &m);
     getchar();
 
+    if (m > 20) m = 20;
+
     while (n < m) {
         Node *cabeca = NULL;
-        char produto[50];
         char lista[1000];
         fgets(lista, 1000, stdin);
-        
+
         char *token = strtok(lista, " \n");
         while (token != NULL) {
             inserir_ordenado(&cabeca, token);
             token = strtok(NULL, " \n");
         }
-        
+
         tam[n] = imprimir_lista(cabeca, saida, n);
         liberar_lista(cabeca);
         n++;
     }
-    
-    n=0;
-    while (n < m) {
-        for(int j=0; j<tam[n]+1; j++){
-            printf("%s ", saida[j][n]);
-            
-            
+
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < tam[i]; j++) {
+            printf("%s ", saida[j][i]);
         }
         printf("\n");
-        n++;
-    }    
+    }
 
     return 0;
 }
