@@ -1,3 +1,5 @@
+//Este código recebe 6 números não nulos e retorna quantos números positivos foram inseridos
+
 #include <stdio.h>
 
 int main(){
