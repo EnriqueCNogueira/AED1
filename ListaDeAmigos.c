@@ -1,3 +1,5 @@
+//Este código recebe duas listas de amigos e um nome presente na primeira lista, ou "nao", e insere a segunda lista antes do nome, ou uma lista após a outra caso receba "nao"
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
