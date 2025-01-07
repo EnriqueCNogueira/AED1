@@ -1,3 +1,5 @@
+//O código recebe uma matriz 9x9 e retorna se é um sudoku válido
+
 #include <stdio.h>
 
 //Função que le a matriz
