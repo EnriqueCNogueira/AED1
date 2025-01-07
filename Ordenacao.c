@@ -1,3 +1,5 @@
+//O código ordena uma lista de nomes usando MergeSort e exibe o nome na posição especificada pelo usuário
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
