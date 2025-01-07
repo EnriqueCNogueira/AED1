@@ -1,3 +1,5 @@
+//Este código recebe o raio de um círculo e retorna sua área
+
 #include <stdio.h>
  
 int main() {
