@@ -1,3 +1,5 @@
+//O código recebe até 20 listas de produtos e retorna uma lista em ordem alfabética e sem repetições
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
