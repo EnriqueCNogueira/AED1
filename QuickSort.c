@@ -1,3 +1,5 @@
+//Este código utiliza o algoritmos QuickSort para ordenar um vetor em ordem crescente
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
