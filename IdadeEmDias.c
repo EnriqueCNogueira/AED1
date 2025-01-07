@@ -1,3 +1,5 @@
+//Este código recebe um número n e retorna quantos anos meses e dias correspondem a esse número
+
 #include <stdio.h>
  
 int main() {
