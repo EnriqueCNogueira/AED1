@@ -1,85 +1,91 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define M 11  // Tamanho da tabela hash (número primo)
-
-// Estrutura de um nó na lista encadeada
-typedef struct Node {
-    int key;
-    struct Node *next;
+// Estrutura de nó para a lista encadeada (cada índice da tabela hash)
+typedef struct node {
+    int data;
+    struct node *next;
 } Node;
 
-// Função que cria um novo nó com a chave informada
-Node* createNode(int key) {
-    Node *newNode = (Node *) malloc(sizeof(Node));
-    if(newNode == NULL) {
-        fprintf(stderr, "Erro na alocação de memória.\n");
-        exit(EXIT_FAILURE);
+// Função que retorna o primeiro número primo maior que n
+int Primo(int n) {
+    int num = n + 1;
+    while (1) {
+        int isPrime = 1;
+        // Verifica se num é primo
+        for (int i = 2; i * i <= num; i++) {
+            if (num % i == 0) {
+                isPrime = 0;
+                break;
+            }
+        }
+        if (isPrime)
+            return num;
+        num++;
     }
-    newNode->key = key;
-    newNode->next = NULL;
-    return newNode;
 }
 
-// Função hash utilizando o método da divisão: h(k) = k mod M
-int hash(int key) {
-    return key % M;
-}
-
-// Função para inserir uma chave na tabela hash (inserção no início da lista encadeada)
-void insert(Node *hashTable[], int key) {
-    int index = hash(key);
-    Node *newNode = createNode(key);
-    // Insere o novo nó no início da lista em hashTable[index]
-    newNode->next = hashTable[index];
-    hashTable[index] = newNode;
-}
-
-// Função para imprimir o conteúdo da tabela hash
-void printHashTable(Node *hashTable[]) {
-    for (int i = 0; i < M; i++) {
-        printf("Índice %d: ", i);
-        Node *current = hashTable[i];
-        if (current == NULL) {
-            printf("vazio");
-        }
-        while (current != NULL) {
-            printf("%d ", current->key);
-            current = current->next;
-        }
-        printf("\n");
+// Função para inserir um elemento x na tabela hash com tratamento de colisão por encadeamento
+void Hash(Node *hash_table[], int x, int table_size) {
+    int index = x % table_size;
+    Node *new_node = malloc(sizeof(Node));
+    new_node->data = x;
+    new_node->next = NULL;
+    
+    // Insere no final da lista encadeada do índice correspondente
+    if (hash_table[index] == NULL) {
+        hash_table[index] = new_node;
+    } else {
+        Node *p = hash_table[index];
+        while (p->next != NULL)
+            p = p->next;
+        p->next = new_node;
     }
 }
 
 int main() {
-    // Conjunto A com os elementos a serem inseridos
-    int A[] = {7, 10, 23, 1, 77, 50, 34, 15};
-    int n = sizeof(A) / sizeof(A[0]);
-
-    // Criação da tabela hash: um vetor de ponteiros para Node
-    Node *hashTable[M];
-    for (int i = 0; i < M; i++) {
-        hashTable[i] = NULL;
+    int n;
+    printf("Digite quantos elementos deseja inserir na tabela hash: ");
+    scanf("%d", &n);
+    
+    // Define o tamanho da tabela como o primeiro primo maior que n
+    int table_size = Primo(n);
+    
+    // Aloca a tabela hash (vetor de ponteiros para Node) e inicializa cada posição com NULL
+    Node **hash_table = malloc(table_size * sizeof(Node*));
+    for (int i = 0; i < table_size; i++)
+        hash_table[i] = NULL;
+    
+    // Recebe os elementos do usuário e insere na tabela hash
+    printf("Digite os elementos:\n");
+    for (int i = 0; i < n; i++){
+        int x;
+        scanf("%d", &x);
+        Hash(hash_table, x, table_size);
     }
-
-    // Insere cada elemento de A na tabela hash
-    for (int i = 0; i < n; i++) {
-        insert(hashTable, A[i]);
+    
+    // Imprime toda a tabela hash
+    printf("\nTabela Hash:\n");
+    for (int i = 0; i < table_size; i++){
+        printf("Indice %d: ", i);
+        Node *p = hash_table[i];
+        while(p != NULL){
+            printf("%d -> ", p->data);
+            p = p->next;
+        }
+        printf("NULL\n");
     }
-
-    // Imprime o estado final da tabela hash
-    printf("Tabela Hash (com encadeamento):\n");
-    printHashTable(hashTable);
-
-    // Libera a memória alocada para cada nó
-    for (int i = 0; i < M; i++) {
-        Node *current = hashTable[i];
-        while (current != NULL) {
-            Node *temp = current;
-            current = current->next;
+    
+    // Libera a memória alocada para os nós e para a tabela
+    for (int i = 0; i < table_size; i++){
+        Node *p = hash_table[i];
+        while(p != NULL){
+            Node *temp = p;
+            p = p->next;
             free(temp);
         }
     }
-
+    free(hash_table);
+    
     return 0;
 }
